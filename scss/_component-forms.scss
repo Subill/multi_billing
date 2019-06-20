@@ -1,0 +1,138 @@
+@include _formGroup(column);
+@include _formLabel(dark);
+@include _formInput;
+
+.form-help-text{
+  font-size: 0.89rem;
+  line-height: 1.2rem;
+  color: $help-text;
+  margin-bottom: $gutter;
+}
+
+
+/* Loader */
+.page-loader {
+  position: fixed;
+  z-index: 99999999;
+  height: 100vh;
+  width: 100vw;
+  background: $color-white;
+  top: 0px;
+  left: 0px;
+}
+.page-loader > div, .page-loader .page-loader-text{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.page-loader .page-loader-text{
+  transform: translate(-50%, 50%);
+}
+.loader{
+  position: fixed;
+  //position: relative;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 27px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #3194ff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 6px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 6px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 26px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 45px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(19px, 0);
+  }
+}
+
+
+/* @mixins */
+@mixin form-checkboxes{
+  .iconToggleField {
+    cursor: pointer;
+    position: relative;
+    border: 1px solid $color-blue;
+    background: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+
+    span.itf-icon {
+      color: $color-light-blue-gray !important;
+      background: none !important;
+      position: absolute;
+      margin-left: 3px;
+      margin-top: 5px;
+      width: 17px;
+      height: 9px;
+      border-bottom: solid 3px currentColor;
+      border-left: solid 3px currentColor;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      @include defaultTransition(150ms);
+    }
+
+    &:hover {
+      span.itf-icon {
+        color: $color-title-container-border !important;
+        border-color: currentColor !important;
+        @include defaultTransition(150ms);
+      }
+    }
+
+    &.active {
+      span.itf-icon {
+        color: $color-blue !important;
+        @include defaultTransition(150ms);
+      }
+    }
+
+    input {
+      display: none;
+    }
+  }
+}

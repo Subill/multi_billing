@@ -1,0 +1,22 @@
+/* mixins */
+@import "_mixins";
+@import "css-icons";
+
+/* variables */
+@import "variables";
+@import "colors";
+@import "text";
+
+/* elements */
+@import "buttons";
+
+/* component */
+@import "_component-forms";
+
+img{
+  @include text_muted;
+}
+
+/* servicebot-billing-embed client -- for this repo project only! */
+@import "_elements-credit-cards.scss";
+@import "_component-servicebot-billing-embed-client.scss";
