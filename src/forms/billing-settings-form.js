@@ -59,14 +59,14 @@ class BillingForm extends React.Component {
 
      fetchUser() {
          let self = this;
-         let fund = self.props.userFund.user_id;
-             Fetcher(`/api/v1/users/${fund}`).then(function (response) {
+         //let fund = self.props.userFund.user_id;
+            Fetcher(`/api/v1/users/${this.props.uid}`).then(function (response) {
                  if (response) {
                          self.setState({
                              email: response.name || response.email,
                          });
                  }
-             });
+            });
      }
 
     close() {
@@ -120,7 +120,7 @@ class BillingForm extends React.Component {
                 disabled={false}
                 embed={false}
                 reference={this.getReference()}
-                email={this.props.user.email}
+                email={this.state.email}
                 amount={5000}
                 paystackkey={this.props.spk || "no_public_token"}
                 {...this.props}
@@ -147,7 +147,7 @@ class BillingForm extends React.Component {
                 disabled={false}
                 embed={false}
                 reference={this.getReference()}
-                email={this.props.user.email}
+                email={this.state.email}
                 amount={5000}
                 paystackkey={this.props.spk || "no_public_token"}
                 {...this.props}

@@ -28,7 +28,7 @@ class ServicebotManagedBilling extends React.Component {
         this.state = {
             instances: [],
             funds: [],
-            //user: {},
+            user: {},
             fund_url : "api/v1/funds",
             spk: null,
             loading:true,
@@ -159,7 +159,7 @@ class ServicebotManagedBilling extends React.Component {
         }
     }
 
-    /*async getUser(){
+    async getUser(){
         let self = this;
         let url = this.props.serviceInstanceId ? `${self.props.url}/api/v1/service-instances/${this.props.serviceInstanceId}` : `${self.props.url}/api/v1/service-instances/own`
         let instances = await Fetcher(url, "GET", null, this.getRequest("GET"));
@@ -171,14 +171,14 @@ class ServicebotManagedBilling extends React.Component {
                 //return console.log(response);
             }
         });
-    }*/
+    }
 
-    getSPK(){
-        /*let self = this;
+    async getSPK(){
+        let self = this;
         let url = this.props.serviceInstanceId ? `${self.props.url}/api/v1/service-instances/${this.props.serviceInstanceId}` : `${self.props.url}/api/v1/service-instances/own`
         let instances = await Fetcher(url, "GET", null, this.getRequest("GET"));
-        let tid = instances.t_id;*/
-        fetch(`${this.props.url}/api/v1/stripe/spk`)
+        let tid = instances.t_id;
+        fetch(`${this.props.url}/api/v1/stripe/spk/${tid}`)
             .then(function(response) {
                 return response.json()
             }).then(function(json) {
