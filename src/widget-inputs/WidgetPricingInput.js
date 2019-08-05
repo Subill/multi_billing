@@ -31,7 +31,8 @@ class WidgetPricingInput extends React.Component{
         let prefix = options.currency ? getSymbolFromCurrency(options.currency.value) : '';
 
         if(operation == 'add' || operation == 'subtract'){
-            let price = (value/100);
+            //let price = (value/100);
+            let price = (value);
             return(
                 <NumberFormat className="form-control addon-checkbox-widget-price-input" name={name}
                               prefix={prefix} decimalSeparator="." thousandSeparator="," decimalScale="2"

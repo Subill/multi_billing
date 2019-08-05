@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import creditCardIcon from "../utilities/credit-card-icons.js";
 import Alerts from "../utilities/alerts.js"
 import Load from "../utilities/load";
-import PaystackButton from "react-paystack";
+import RavePaymentModal from 'react-ravepayment';
 
 class CardSection extends React.Component {
     render() {
@@ -24,11 +24,13 @@ class BillingForm extends React.Component {
 
     constructor(props){
         super(props);
+        let user = this.props.user;
         this.state = {  loading: false,
             CardModal: false,
             alerts: null,
             hasCard: false,
             loading: true,
+            email: user.email,
             showForm: false,
             card: {},
             rows: {},
@@ -36,6 +38,7 @@ class BillingForm extends React.Component {
             url: `/api/v1/funds`
         };
         this.fetchUser = this.fetchUser.bind(this);
+        this.getCurrency = this.getCurrency.bind(this);
     }
 
     callback (response) {
@@ -57,6 +60,11 @@ class BillingForm extends React.Component {
         console.log(response); // card charged successfully, get reference here
     }
 
+    componentDidMount() {
+        let self = this;
+        self.getCurrency();
+    }
+
      fetchUser() {
          let self = this;
          //let fund = self.props.userFund.user_id;
@@ -68,6 +76,26 @@ class BillingForm extends React.Component {
                  }
             });
      }
+
+     fetchFund(){
+        let self = this;
+        let fund = self.props.userFund;
+        let fundId = fund.id;
+        Fetcher(`/api/v1/funds/${fundId}`, 'DELETE').then(function (response) {
+            if(!response.error){
+                self.setState({success: true, response: response});
+            }else{
+                console.error("error delete fund", response);
+                self.setState({
+                    alerts: {
+                        type: 'danger',
+                        icon: 'times',
+                        message: response.error
+                    }
+                });
+            }
+        })
+    }
 
     close() {
         console.log("Payment closed");
@@ -83,6 +111,15 @@ class BillingForm extends React.Component {
 
         return text;
     }
+
+    getCurrency(){
+        let self = this;
+        fetch(`${this.props.url}/api/v1/tenant-system-options`).then(function(response) {
+                return response.json()
+            }).then(function(json) {
+            self.setState({currency : json.currency});
+        }).catch(e => console.error(e));
+    };
 
     getAlerts() {
         if(this.state.alerts){
@@ -110,21 +147,7 @@ class BillingForm extends React.Component {
                     </p>
                 
                 <hr/>
-                <PaystackButton
-                text="Update Payment"
-                class="buttons _default"
-                //class="payButton"
-                //className="btn btn-default btn-rounded btn-md m-r-5 application-launcher"
-                callback={this.callback}
-                close={this.close}
-                disabled={false}
-                embed={false}
-                reference={this.getReference()}
-                email={this.state.email}
-                amount={5000}
-                paystackkey={this.props.spk || "no_public_token"}
-                {...this.props}
-              />
+                <Buttons btnType="buttons _default" text="Update Payment" success={this.state.success} onClick={this.fetchFund}/>
               
               </div>
             )
@@ -137,20 +160,21 @@ class BillingForm extends React.Component {
                 <h3><i className="fa fa-credit-card"/>Your credit/debit card</h3>
                 {this.getAlerts()}
                 <hr/>
-                <PaystackButton
+                <RavePaymentModal
                 text="Add your card"
                 class="buttons _default"
                 //class="payButton"
                 //className="btn btn-default btn-rounded btn-md m-r-5 application-launcher"
                 callback={this.callback}
                 close={this.close}
-                disabled={false}
-                embed={false}
                 reference={this.getReference()}
+                currency={this.state.currency}
                 email={this.state.email}
-                amount={5000}
-                paystackkey={this.props.spk || "no_public_token"}
-                {...this.props}
+                amount={1}
+                payment_method="card"
+                ravePubKey={this.props.spk || "no_public_token"}
+                isProduction= {false}
+                tag= "button"
               />
               </div>
             )

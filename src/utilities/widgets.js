@@ -78,7 +78,7 @@ let PriceBreakdown = (props) => {
         "divide": "-"
     };
     // console.log(metricProp, instance);
-    let basePrice = getBasePrice(instance.references.service_instance_properties, handlers, instance.payment_plan.amount);
+    let basePrice = getBasePrice(instance.references.service_instance_properties, handlers, instance.payment_plan.body.data.amount);
     let breakdown = inputs.reduce((acc, input) => {
         if (input.config && input.config.pricing && widgets[input.type] && widgets[input.type].handler && widgets[input.type].handler.priceHandler && widgets[input.type].handler.priceHandler(input.data, input.config)) {
             let price = widgets[input.type].handler.priceHandler(input.data, input.config)
@@ -88,16 +88,16 @@ let PriceBreakdown = (props) => {
                     <span className="_label">{input.prop_label}</span>
                     <span className="_value_wrap">
                         <span className="_prefix">{map[input.config.pricing.operation]}</span>
-                        <span className="_value"><Price value={price} currency={instance.payment_plan.currency}/></span>
+                        <span className="_value"><Price value={price} currency={instance.payment_plan.body.data.currency}/></span>
                     </span>
                 </p>);
         }
         return acc;
-    }, [(                <p key={`item-${instance.payment_plan.id}`} className="_item">
+    }, [(                <p key={`item-${instance.payment_plan.body.data.id}`} className="_item">
         <span className="_label">Base price</span>
         <span className="_value_wrap">
                         <span className="_prefix">+</span>
-                        <span className="_value"><Price value={basePrice} currency={instance.payment_plan.currency}/></span>
+                        <span className="_value"><Price value={basePrice} currency={instance.payment_plan.body.data.currency}/></span>
                     </span>
     </p>)]);
     if(breakdown.length === 1){

@@ -6,7 +6,8 @@ import React from 'react';
  * Since Stripe takes amount in cents, we want to convert it and display dollar value.
  */
 function getPriceValue(value){
-    return `$${(value/100).toFixed(2)}`;
+   // return `$${(value/100).toFixed(2)}`;
+    return `$${(value).toFixed(2)}`;
 }
 
 function formatMoney(price, c, d, t){
@@ -21,7 +22,8 @@ function formatMoney(price, c, d, t){
 };
 
 let Price = function(props){
-    let price = props.value/100;
+    //let price = props.value/100;
+    let price = props.value;
     let formatter = new Intl.NumberFormat("en-US", { style: 'currency', currency: (props.currency && props.currency.toUpperCase()) || "NGN" }).format;
     return(
         <span className="_price-value">{ formatter(price)}</span>
@@ -30,12 +32,12 @@ let Price = function(props){
 
 let getPrice = (myService, serviceType = null)=>{
     let serType = myService.type || serviceType;
-let currency = (myService.payment_plan && myService.payment_plan.data.currency) || "USD"
+let currency = (myService.payment_plan && myService.payment_plan.body.data.currency) || "USD"
     if (serType === "subscription"){
         return (
             <span className="_unit">
-                <Price value={myService.payment_plan.data.amount} currency={currency}/>
-                <span>{myService.payment_plan.interval_count === 1 ? ' /' : ' / ' + myService.payment_plan.data.interval}</span>
+                <Price value={myService.payment_plan.body.data.amount} currency={currency}/>
+                <span>{myService.payment_plan.interval_count === 1 ? ' /' : ' / ' + myService.payment_plan.body.data.interval}</span>
             </span>
         );
     }else if (serType === "one_time"){

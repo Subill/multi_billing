@@ -22,9 +22,9 @@ const findMonthlyPrice = (x, interval) => {
             return x * 30
         case "weekly":
             return x * 4
-        case "biannually":
+        case "every 6 months":
             return Math.floor(x/6);
-        case "annually":
+        case "yearly":
             return Math.floor(x/12);
     }
 }
@@ -34,7 +34,8 @@ const Tier = (props) => {
     let tierContent, tierButton;
     let formatter = new Intl.NumberFormat("en-US", { style: 'currency', currency: plan.currency || "NGN" }).format;
 
-    let tierPrice = formatter(findMonthlyPrice(plan.amount, plan.interval)/100);
+    //let tierPrice = formatter(findMonthlyPrice(plan.amount, plan.interval)/100);
+    let tierPrice = formatter(findMonthlyPrice(plan.amount, plan.interval));
     if(plan.trial_period_days > 0){
         tierButton = "Try for Free"
     }else{

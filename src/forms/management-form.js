@@ -98,7 +98,7 @@ class ServicebotManagedBilling extends React.Component {
     }
     getSubscriptionStatus(instance){
         if(instance.status === "cancelled"){
-            if(this.state.funds.length === 0 && instance.payment_plan && instance.payment_plan.data.amount > 0) {
+            if(this.state.funds.length === 0 && instance.payment_plan && instance.payment_plan.body.data.amount > 0) {
                 return <div>
                     <p className={"form-help-text"}><strong>Status: cancelled, please update credit/debit card to reactivate</strong></p>
 
@@ -264,6 +264,7 @@ class ServicebotManagedBilling extends React.Component {
                         <h5 className="form-help-text">Add your funding credit/debit card.</h5>
                         <BillingForm buttonText={buttonText}
                                      handleResponse={self.handleResponse(instance)}
+                                     user={self.state.instances[0].references.users[0]}
                                      token={self.props.token} spk={self.state.spk}
                                      external={self.props.external}
                                      submitAPI={`${self.props.url}/${self.state.fund_url}`} />
@@ -272,6 +273,7 @@ class ServicebotManagedBilling extends React.Component {
                     <div>
                         <BillingForm handleResponse={self.handleResponse(instance)}
                                      buttonText={buttonText}
+                                     user={self.state.instances[0].references.users[0]}
                                      token={self.props.token}
                                      spk={self.state.spk}
                                      external={self.props.external}

@@ -94,7 +94,7 @@ function CustomFieldEditForm(props) {
     let properties = props.formJSON.service_instance_properties.filter(prop => {
         return prop.type !== "select" || selectAffectPricing(prop)
     });
-    let basePrice = getBasePrice(props.instance.references.service_instance_properties, handlers, (props.instance.payment_plan && props.instance.payment_plan.data.amount) || 0);
+    let basePrice = getBasePrice(props.instance.references.service_instance_properties, handlers, (props.instance.payment_plan && props.instance.payment_plan.body.data.amount) || 0);
     let priceData = getPriceData(basePrice, properties);
     return (
         <form>
@@ -102,7 +102,7 @@ function CustomFieldEditForm(props) {
             <h3>Subscription Add Ons</h3>
 
             <FieldArray
-                currency={(props.instance.payment_plan && props.instance.payment_plan.data.currency) || "NGN"}
+                currency={(props.instance.payment_plan && props.instance.payment_plan.body.data.currency) || "NGN"}
                 name="service_instance_properties" component={renderCustomProperty}
                         formJSON={properties}/>
 
@@ -111,8 +111,8 @@ function CustomFieldEditForm(props) {
                     <label>Total Cost:</label>
                 </p>
                <p>
-                    <Price className="_total-price" currency={(props.instance.payment_plan && props.instance.payment_plan.data.currency) || "NGN"} value={priceData.total} />
-                    <span className="_unit"><span className="_per">/</span>{props.instance.payment_plan.data.interval}</span>
+                    <Price className="_total-price" currency={(props.instance.payment_plan && props.instance.payment_plan.body.data.currency) || "NGN"} value={priceData.total} />
+                    <span className="_unit"><span className="_per">/</span>{props.instance.payment_plan.body.data.interval}</span>
                     <button disabled={invalid|| submitting || pristine} className="buttons _primary" onClick={props.handleSubmit} type="submit" value="submit">Submit</button>
                 </p>
             </div>
