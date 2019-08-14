@@ -77,6 +77,7 @@ class Invoices extends React.Component {
         this.state = {
             invoiceToShow : null,
             tid: invoice.t_id,
+            spk: '',
             loading: true,
             alerts: null
         }
@@ -148,13 +149,16 @@ class Invoices extends React.Component {
         }
     }
 
-    getSPK(){
+    async getSPK(){
         let self = this;
-        let tid = self.state.tid;
-        fetch(`${this.props.url}/api/v1/stripe/spk/${tid}`).then(function(response) {
+        let url = this.props.serviceInstanceId ? `${self.props.url}/api/v1/service-instances/${this.props.serviceInstanceId}` : `${self.props.url}/api/v1/service-instances/own`
+        let instances = await Fetcher(url, "GET", null, this.getRequest("GET"));
+        let tid = instances.t_id;
+        fetch(`${this.props.url}/api/v1/stripe/spk/${tid}`)
+            .then(function(response) {
                 return response.json()
             }).then(function(json) {
-            self.setState({loading:false, spk : json.spk});
+            self.setState({spk : json.spk});
         }).catch(e => console.error(e));
     }
 
@@ -165,6 +169,19 @@ class Invoices extends React.Component {
             }).then(function(json) {
             self.setState({currency : json.currency});
         }).catch(e => console.error(e));
+    }
+
+    getLiveMode(){
+        let self = this;
+        if(this.state.spk !== '') {
+            let pk = self.state.spk;
+            let livemode = pk ? pk.substring(9, 12) : "";
+            if (livemode.toUpperCase() === "TEST") {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 
     render() {
@@ -203,7 +220,7 @@ class Invoices extends React.Component {
                                 email={user.email}
                                 amount={invoice.amount_due}
                                 ravePubKey={spk}
-                                isProduction= {false}
+                                isProduction= {this.getLiveMode()}
                                 tag= "button"
                         /></span> : <span className={`buttons __invoice-button`}>None</span>}
                         <span className={`buttons __invoice-button`} onClick={this.viewInvoice(index)}>View Invoice</span>

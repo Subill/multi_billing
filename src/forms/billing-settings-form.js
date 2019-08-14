@@ -97,6 +97,19 @@ class BillingForm extends React.Component {
         })
     }
 
+    getLiveMode(){
+        let self = this;
+        if(this.props.spk !== '') {
+            let pk = self.state.spk;
+            let livemode = pk ? pk.substring(9, 12) : "";
+            if (livemode.toUpperCase() === "TEST") {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     close() {
         console.log("Payment closed");
     }
@@ -173,7 +186,7 @@ class BillingForm extends React.Component {
                 amount={1}
                 payment_method="card"
                 ravePubKey={this.props.spk || "no_public_token"}
-                isProduction= {false}
+                isProduction= {this.getLiveMode()}
                 tag= "button"
               />
               </div>
