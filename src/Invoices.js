@@ -77,19 +77,16 @@ class Invoices extends React.Component {
         this.state = {
             invoiceToShow : null,
             tid: invoice.t_id,
-            spk: '',
             loading: true,
             alerts: null
         }
         this.cancel = this.cancel.bind(this);
         this.viewInvoice = this.viewInvoice.bind(this);
-        this.getSPK = this.getSPK.bind(this);
         this.getCurrency = this.getCurrency.bind(this);
 
     }
 
     componentDidMount() {
-        this.getSPK();
         this.getCurrency();
     }
 
@@ -149,19 +146,6 @@ class Invoices extends React.Component {
         }
     }
 
-    async getSPK(){
-        let self = this;
-        let url = this.props.serviceInstanceId ? `${self.props.url}/api/v1/service-instances/${this.props.serviceInstanceId}` : `${self.props.url}/api/v1/service-instances/own`
-        let instances = await Fetcher(url, "GET", null, this.getRequest("GET"));
-        let tid = instances.t_id;
-        fetch(`${this.props.url}/api/v1/stripe/spk/${tid}`)
-            .then(function(response) {
-                return response.json()
-            }).then(function(json) {
-            self.setState({spk : json.spk});
-        }).catch(e => console.error(e));
-    }
-
     getCurrency(){
         let self = this;
         fetch(`${this.props.url}/api/v1/tenant-system-options`).then(function(response) {
@@ -185,9 +169,8 @@ class Invoices extends React.Component {
     }
 
     render() {
-        let {invoices, user} = this.props;
+        let {invoices, user, spk} = this.props;
         let {invoiceToShow} = this.state;
-        let spk = this.state.spk;
         let currency = this.state.currency;
         if (!invoices || invoices.length === 0) {
             return <div></div>

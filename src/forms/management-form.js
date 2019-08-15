@@ -177,7 +177,9 @@ class ServicebotManagedBilling extends React.Component {
         let self = this;
         let url = this.props.serviceInstanceId ? `${self.props.url}/api/v1/service-instances/${this.props.serviceInstanceId}` : `${self.props.url}/api/v1/service-instances/own`
         let instances = await Fetcher(url, "GET", null, this.getRequest("GET"));
-        let tid = instances.t_id;
+        for(let instance of instances){
+            var tid = instance.t_id;
+        }
         fetch(`${this.props.url}/api/v1/stripe/spk/${tid}`)
             .then(function(response) {
                 return response.json()
@@ -426,7 +428,7 @@ class ServicebotManagedBilling extends React.Component {
                                 {this.getBillingForm(self.state.instances[0])}
 
                                 <ModalEditProperties external={this.props.external} token={this.props.token} url={this.props.url} instance={self.state.instances[0]} refresh={this.hidePropEdit}/>
-                            {self.state.instances[0] && <Invoices user={self.state.instances[0].references.users[0]} invoices={this.state.invoices}/>}
+                            {self.state.instances[0] && <Invoices user={self.state.instances[0].references.users[0]} invoices={this.state.invoices} spk={this.state.spk}/>}
                         </div>
                         :
                         <Load finishLoading={this.props.finishLoading}>
