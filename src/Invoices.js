@@ -130,7 +130,8 @@ class Invoices extends React.Component {
 
     getReference() {
         //you can put any unique reference implementation code here
-        let text = "SUBILL-";
+        let {user} = this.props;
+        let text = user.t_id;
         let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=";
 
         for( let i=0; i < 10; i++ )

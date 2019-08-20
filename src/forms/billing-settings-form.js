@@ -29,6 +29,7 @@ class BillingForm extends React.Component {
             CardModal: false,
             alerts: null,
             hasCard: false,
+            tid: user.t_id,
             loading: true,
             email: user.email,
             showForm: false,
@@ -116,7 +117,7 @@ class BillingForm extends React.Component {
 
     getReference() {
         //you can put any unique reference implementation code here
-        let text = "verify";
+        let text = this.state.tid;
         let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=";
 
         for( let i=0; i < 15; i++ )

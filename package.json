@@ -1,6 +1,6 @@
 {
   "name": "multi-billing",
-  "version": "0.2.118",
+  "version": "0.2.119",
   "dependencies": {
     "currency-symbol-map": "^4.0.4",
     "lodash": "^4.17.5",

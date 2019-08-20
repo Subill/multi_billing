@@ -177,6 +177,9 @@ class ServicebotManagedBilling extends React.Component {
         let self = this;
         let url = this.props.serviceInstanceId ? `${self.props.url}/api/v1/service-instances/${this.props.serviceInstanceId}` : `${self.props.url}/api/v1/service-instances/own`
         let instances = await Fetcher(url, "GET", null, this.getRequest("GET"));
+        if(this.props.serviceInstanceId){
+            instances = [instances];
+        }
         for(let instance of instances){
             var tid = instance.t_id;
         }
